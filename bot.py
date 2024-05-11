@@ -33,7 +33,7 @@ def mass_report_scammer(message):
     user_id = message.from_user.id
 
     # Check if the user has executed the command recently
-    if user_id in user_last_command_time and time.time() - user_last_command_time[user_id] < 60:  # Limiting to one request per minute
+    if user_id in user_last_command_time and time.time() - user_last_command_time[user_id] < 40:  # Limiting to one request per minute
         bot.reply_to(message, "You are sending reports too quickly. Please wait for a minute before sending another report.")
         return
 
