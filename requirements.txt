@@ -1,5 +1,4 @@
 telebot
-random
 requests
 user_agent
 gunicorn
