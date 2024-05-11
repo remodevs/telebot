@@ -53,7 +53,8 @@ def mass_report_scammer(message):
              "radwan", "haider", "zainab", "ahmed", "youssef"]
 
     start_time = time.time()
-    progress_message = bot.send_message(message.chat.id, f"Sending reports for {scammer_username}... 0/{num_reports}")
+    bot.send_message(message.chat.id, f"Reports are being sent to Telegram for {scammer_username}, it usually takes 30-40 seconds.")
+
     for i in range(num_reports):
         num = f"+91{random.randint(9392823620, 9994997058)}"
         email = f"{random.choice(names)}{random.randint(9392820, 9994958)}@gmail.com"
@@ -105,19 +106,17 @@ def mass_report_scammer(message):
         }).text
 
         # Check if the report was successful
-        if "Thanks" in req:
-            bot.edit_message_text(chat_id=message.chat.id, message_id=progress_message.id, text=f"Sending reports for {scammer_username}... {i+1}/{num_reports}")
-        else:
+        if "Thanks" not in req:
             bot.reply_to(message, f"Error reporting the scammer for report number {i + 1}.")
 
     end_time = time.time()
     total_time = end_time - start_time
-    bot.edit_message_text(chat_id=message.chat.id, message_id=progress_message.id, text=f"Sent {num_reports} reports for {scammer_username}. Total time: {total_time:.2f} seconds.")
+    bot.send_message(message.chat.id, f"Sent {num_reports} reports for {scammer_username}. Total time: {total_time:.2f} seconds.")
 
 # Start command handler
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "Welcome to the Telegram Scammer Reporting Bot. To report a scammer, use the /report command followed by the scammer's username. To mass report a scammer, use the /massreport command followed by the scammer's username.")
+    bot.reply_to(message, "Welcome to the Telegram Scammer Reporting Bot. To report a scammer, use the /massreport <username of scammer> command followed by the scammer's username. To mass report a scammer, use the /massreport command followed by the scammer's username.")
 
 # Start the bot
 bot.polling()
