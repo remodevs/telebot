@@ -6,7 +6,7 @@ from user_agent import generate_user_agent as ua
 import time
 
 # Initialize the bot with your token
-bot = telebot.TeleBot("7031783178:AAFMSnCLKn4Cvh5WBEzn4uZy_9xWllxV6Qk")
+bot = telebot.TeleBot("7031783178:AAFQKJuH6yGKT77BNrkm-tO_ojRxdGf-fDI")
 
 # Dictionary to store the last time each user executed a command
 user_last_command_time = {}
