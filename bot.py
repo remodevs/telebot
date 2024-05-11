@@ -44,7 +44,7 @@ def mass_report_scammer(message):
     scammer_username = message.text.split()[1]
 
     # Define the number of reports to send
-    num_reports = 100
+    num_reports = 50
 
     # Generate random email and phone number for each report
     names = ["raof", "fazel", "aymen", "abdulmalek", "mohammed", "Naseer", "Whis", "REEKY.", "spamkiller",
