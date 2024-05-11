@@ -1,5 +1,6 @@
 import telebot
 import random
+import pyfiglet
 import requests
 from telebot import types
 from user_agent import generate_user_agent as ua
@@ -8,43 +9,14 @@ import time
 # Initialize the bot with your token
 bot = telebot.TeleBot("7031783178:AAFMSnCLKn4Cvh5WBEzn4uZy_9xWllxV6Qk")
 
-# Dictionary to store the last time each user executed a command
-user_last_command_time = {}
-
-# Function to rotate proxies
-def get_proxy(proxy_type):
-    with open(f"{proxy_type}_proxies.txt", 'r') as file:
-        proxies = file.readlines()
-    return random.choice(proxies).strip()
-
-# Custom report messages
-custom_messages = [
-    "This user is engaging in suspicious activities. Please investigate.",
-    "I suspect this user of being involved in scams. Kindly take appropriate action.",
-    "Reporting this user for suspicious behavior. Please review.",
-    "I believe this user may be engaging in phishing attempts. Please look into it.",
-    "Flagging this user for potential scam activity. Please take action."
-]
-
 # Command to report a scammer
 @bot.message_handler(commands=['massreport'])
 def mass_report_scammer(message):
-    # Get the user's ID
-    user_id = message.from_user.id
-
-    # Check if the user has executed the command recently
-    if user_id in user_last_command_time and time.time() - user_last_command_time[user_id] < 60:  # Limiting to one request per minute
-        bot.reply_to(message, "You are sending reports too quickly. Please wait for a minute before sending another report.")
-        return
-
-    # Update the last command time for the user
-    user_last_command_time[user_id] = time.time()
-
     # Get the username to report
     scammer_username = message.text.split()[1]
 
     # Define the number of reports to send
-    num_reports = 100
+    num_reports = 50
 
     # Generate random email and phone number for each report
     names = ["raof", "fazel", "aymen", "abdulmalek", "mohammed", "Naseer", "Whis", "REEKY.", "spamkiller",
@@ -58,13 +30,16 @@ def mass_report_scammer(message):
         num = f"+91{random.randint(9392823620, 9994997058)}"
         email = f"{random.choice(names)}{random.randint(9392820, 9994958)}@gmail.com"
 
-        # Select a random custom message
-        message_text = random.choice(custom_messages)
+        # Message to be sent for each report
+        message_text = f"""Hello sir/ma'am,
 
-        # Send the report with rotating proxies
-        proxy_type = random.choice(['http', 'socks4', 'socks5'])
-        proxy = get_proxy(proxy_type)
-        res = requests.get('https://telegram.org/support', proxies={proxy_type: proxy}, headers={
+I would like to report a Telegram user who is engaging in suspicious and harmful activities. Their username is {scammer_username}. I believe they may be involved in scams and phishing attempts, which is causing harm to the community. I would appreciate it if you could look into this matter and take appropriate action.
+
+Thank you for your attention to this matter.
+@SOLDIERX"""
+
+        # Send the report
+        res = requests.get('https://telegram.org/support', headers={
             "Host": "telegram.org",
             "cache-control": "max-age=0",
             "sec-ch-ua": "\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"",
@@ -79,11 +54,11 @@ def mass_report_scammer(message):
             "sec-fetch-dest": "document",
             "referer": "https://www.google.com/",
             "accept-encoding": "gzip, deflate, br, zstd",
-            "accept-language": "en-XA,en;q=0.9,ar-XB;q=0.8,ar;q=0.7"
+            "accept-language": "en-XA,en;q=0.9,ar-XB;q=0.8,ar;q=0.7,en-GB;q=0.6,en-US;q=0.5"
         }).cookies
         stel = res['stel_ssid']
         data = f'message={message_text}&email={email}&phone={num}&setln='
-        req = requests.post('https://telegram.org/support', data=data, proxies={proxy_type: proxy}, headers={
+        req = requests.post('https://telegram.org/support', data=data, headers={
             "Host": "telegram.org",
             "cache-control": "max-age=0",
             "sec-ch-ua": "\"Google Chrome\";v=\"119\", \"Chromium\";v=\"119\", \"Not?A_Brand\";v=\"24\"",
@@ -117,7 +92,12 @@ def mass_report_scammer(message):
 # Start command handler
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
-    bot.reply_to(message, "Welcome to the Telegram Scammer Reporting Bot. To report a scammer, use the /report command followed by the scammer's username. To mass report a scammer, use the /massreport command followed by the scammer's username.")
+    bot.reply_to(message, "Welcome to the Telegram Scammer Reporting Bot. To report a scammer, use the /report command followed by the scammer's username. To mass report a scammer, use the /massreport command followed by the scammer's username. Regards @remoswipe")
+
+# Handle all other messages
+@bot.message_handler(func=lambda message: True)
+def echo_all(message):
+    bot.reply_to(message, "I'm just a reporting bot. Please use the /report command to report scammers or the /massreport command to mass report scammers. Regards @remoswipe")
 
 # Start the bot
 bot.polling()
